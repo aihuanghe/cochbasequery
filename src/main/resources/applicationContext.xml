@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:jaxws="http://cxf.apache.org/jaxws"
+                 xsi:schemaLocation="
+                       http://www.springframework.org/schema/beans
+
+                       http://www.springframework.org/schema/beans/spring-beans.xsd
+                       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+ 
+                <import resource="classpath:META-INF/cxf/cxf.xml"/>
+                <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml"/>
+                <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+ 				<bean id="custGroupCheckImpl" class="com.asiainfo.service.CustGroupCheckImpl"/>
+                <!--<jaxws:endpoint-->
+                              <!--id="helloWorld"-->
+                              <!--implementor="#hello"-->
+                              <!--address="/helloWorld" /> -->
+                 <!--<jaxws:endpoint -->
+                              <!--id="mytest"-->
+                              <!--implementor="#test"-->
+                              <!--address="/mytest" />-->
+                 <!--<jaxws:endpoint -->
+                              <!--id="locationService"-->
+                              <!--implementor="#location"-->
+                              <!--address="/locationService" />-->
+                 <jaxws:endpoint 
+                              id="custgroupcheck"
+                              implementor="#custGroupCheckImpl"
+                              address="/custcroupcheck" />
+                <!--<jaxws:endpoint-->
+                              <!--id="hbase-service"-->
+                              <!--implementor="#hbasequery"-->
+                              <!--address="/hbase-service"-->
+                              <!--/>-->
+                <!-- <bean id="client" class="com.asiainfo.service.HelloWorld" 
+                           factory-bean="clientFactory" factory-method="create"/>
+    
+                 <bean id="clientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+                            <property name="serviceClass" value="com.asiainfo.service.HelloWorld"/>
+                            <property name="address"
+
+                             value="http://localhost:8080/s/webservice/helloWorld"/>
+                  </bean> -->
+                <!--<bean id="mainConn" class="com.asiainfo.db.Connection"></bean>-->
+                <!--<bean id="haConn" class="com.asiainfo.db.ConnectionHA"></beans>-->
+     </beans>

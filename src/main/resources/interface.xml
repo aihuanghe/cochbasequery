@@ -1,0 +1,16 @@
+<interfaces>
+    <interface id="">
+        <param-in>
+            <head></head>
+            <param></param>
+        </param-in>
+        <table-idx name="xxxx[param.xxxx]">
+            <rowkey split="|">
+                <!-- md5[param.xxxx]|param.xxxx|md5[ALLROW]-->
+            </rowkey>
+        </table-idx>
+        <table name="xxxx[param.xxxx]">
+
+        </table>
+    </interface>
+</interfaces>
