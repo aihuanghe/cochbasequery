@@ -2,13 +2,12 @@
     
     <property>
       <name>fs.defaultFS</name>
-      <value>hdfs://hbjkcluster</value>
-      <final>true</final>
+      <value>hdfs://hbcm</value>
     </property>
     
     <property>
       <name>fs.trash.interval</name>
-      <value>360</value>
+      <value>1440</value>
     </property>
     
     <property>
@@ -17,8 +16,13 @@
     </property>
     
     <property>
+      <name>ha.health-monitor.rpc-timeout.ms</name>
+      <value>120000</value>
+    </property>
+    
+    <property>
       <name>ha.zookeeper.quorum</name>
-      <value>hbbdc-jk-dn-02:2181,hbbdc-jk-dn-04:2181,hbbdc-jk-dn-09:2181</value>
+      <value>hbbdc-dn-01:2181,hbbdc-dn-02:2181,hbbdc-dn-03:2181</value>
     </property>
     
     <property>
@@ -33,17 +37,7 @@
     
     <property>
       <name>hadoop.proxyuser.hcat.hosts</name>
-      <value>hbbdc-jk-web-02</value>
-    </property>
-    
-    <property>
-      <name>hadoop.proxyuser.hive.groups</name>
-      <value>*</value>
-    </property>
-    
-    <property>
-      <name>hadoop.proxyuser.hive.hosts</name>
-      <value>hbbdc-jk-web-02</value>
+      <value>hbbdc-nn-02</value>
     </property>
     
     <property>
@@ -53,7 +47,17 @@
     
     <property>
       <name>hadoop.proxyuser.ocdc.hosts</name>
-      <value>HBBDC-JK-WEB-01,hbbdc-jk-web-02</value>
+      <value>*</value>
+    </property>
+    
+    <property>
+      <name>hadoop.proxyuser.oozie.groups</name>
+      <value>*</value>
+    </property>
+    
+    <property>
+      <name>hadoop.proxyuser.oozie.hosts</name>
+      <value>hbom-if-58</value>
     </property>
     
     <property>
@@ -72,8 +76,23 @@
     </property>
     
     <property>
+      <name>hadoop.security.group.mapping</name>
+      <value>org.apache.hadoop.security.ShellBasedUnixGroupsMapping</value>
+    </property>
+    
+    <property>
+      <name>hadoop.security.key.provider.path</name>
+      <value></value>
+    </property>
+    
+    <property>
+      <name>io.compression.codec.lzo.class</name>
+      <value>com.hadoop.compression.lzo.LzoCodec</value>
+    </property>
+    
+    <property>
       <name>io.compression.codecs</name>
-      <value>org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.SnappyCodec</value>
+      <value>org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.BZip2Codec,com.hadoop.compression.lzo.LzoCodec</value>
     </property>
     
     <property>
