@@ -104,6 +104,18 @@ public class Tools {
         }
     }
 
+    public static String convertDate(String date){
+        String val = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date setDate = sdf.parse(date);
+            val = date2Str(setDate,"yyyyMMdd");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return val;
+    }
+
     /**
      * 把时间根据时、分、秒转换为时间段
      * @param StrDate

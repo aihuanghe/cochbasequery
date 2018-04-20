@@ -53,7 +53,7 @@ public class CustGroupCheckBusi {
             tableName+= Tools.date2Str(yestoday,"yyyyMMdd");
             log.info("自动切换日期：" + tableName);
         }else{
-            tableName+=SwitchDateUtils.SWITCH_DATE;
+            tableName+=Tools.convertDate(SwitchDateUtils.SWITCH_DATE);
             log.info("手动切换日期：" + tableName);
         }
 //        HTableDescriptor[] allTable =Connmanage.getTableList();
