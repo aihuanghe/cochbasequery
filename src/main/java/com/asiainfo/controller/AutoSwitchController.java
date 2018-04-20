@@ -17,6 +17,7 @@ public class AutoSwitchController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SwitchDateUtils.IS_AUTOSWITCH = true;
+        SwitchDateUtils.SWITCH_DATE = "";
         PrintWriter writer=response.getWriter();
         logger.info("自动切换设置成功");
         writer.append("true");

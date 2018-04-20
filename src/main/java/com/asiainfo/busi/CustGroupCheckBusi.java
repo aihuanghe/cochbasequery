@@ -6,6 +6,7 @@ import com.asiainfo.until.SwitchDateUtils;
 import com.asiainfo.until.Tools;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.hbase.client.*;
@@ -51,10 +52,15 @@ public class CustGroupCheckBusi {
             c.add(Calendar.DAY_OF_MONTH, -1);
             Date yestoday = c.getTime();
             tableName+= Tools.date2Str(yestoday,"yyyyMMdd");
-            log.info("自动切换日期：" + tableName);
+            log.info("自动切换表名：" + tableName);
         }else{
-            tableName+=Tools.convertDate(SwitchDateUtils.SWITCH_DATE);
-            log.info("手动切换日期：" + tableName);
+            if(StringUtils.isNotBlank(SwitchDateUtils.SWITCH_DATE)){
+                tableName+=Tools.convertDate(SwitchDateUtils.SWITCH_DATE);
+                log.info("手动切换日期：" + SwitchDateUtils.SWITCH_DATE);
+                log.info("手动切换表名：" + tableName);
+            }else{
+                throw new RuntimeException("设置的手动切换日期为null");
+            }
         }
 //        HTableDescriptor[] allTable =Connmanage.getTableList();
 //        List<String> tables = new ArrayList<String>();

@@ -15,7 +15,7 @@
 <div>
     <form class="form-horizontal" action="setDate" role="form">
         <div class="form-group">
-            <label for="date" class="col-sm-2 control-label">模式</label>
+            <label for="date" class="col-sm-2 control-label">切换模式</label>
             <div class="col-sm-10">
                 <input id="type" class="form-control" style="width: 200px;" name="type" readonly>
             </div>
@@ -68,12 +68,17 @@
     });
     
     function setDate() {
+        var date = $("#date").val();
+        if(!date){
+            alert("请选择切换日期");
+            return;
+        }
         $.get({
             url:'setDate',
             data: {'date':$("#date").val()},
             success:function (data) {
                 $("#type").val("手动切换");
-                alert("当前手动切换时间为："+ data);
+                alert("手动切换时间为："+ data);
             }
         })
     }
@@ -90,7 +95,7 @@
                     msg = "手动切换";
                 }
                 var date = data.date;
-                alert("当前是否为手动切换："+msg+",当前手动切换时间为："+ date);
+                alert("切换模式："+msg+"；手动切换时间为："+ date);
             }
         })
 
@@ -103,6 +108,8 @@
                 if(data){
                     alert("自动切换日期：切换成功");
                     $("#type").val("自动切换");
+                    $('#date').datetimepicker('update', '');
+                    $('#date').val('');
                 }else{
                     alert("自动切换日期：切换失败");
                 }
