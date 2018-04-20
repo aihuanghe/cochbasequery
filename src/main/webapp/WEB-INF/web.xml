@@ -33,4 +33,32 @@
     <servlet-name>CXFServlet</servlet-name>
     <url-pattern>/ws/*</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>getDate</servlet-name>
+    <servlet-class>com.asiainfo.controller.GetDateController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getDate</servlet-name>
+    <url-pattern>/getDate</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+  <servlet-name>setDate</servlet-name>
+  <servlet-class>com.asiainfo.controller.SetDateController</servlet-class>
+</servlet>
+  <servlet-mapping>
+    <servlet-name>setDate</servlet-name>
+    <url-pattern>/setDate</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>autoSwitch</servlet-name>
+    <servlet-class>com.asiainfo.controller.AutoSwitchController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>autoSwitch</servlet-name>
+    <url-pattern>/autoSwitch</url-pattern>
+  </servlet-mapping>
+
+
 </web-app>

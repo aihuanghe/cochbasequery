@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>首页</title>
+    <title>切换CRM活动办理查询日期index</title>
     <link type="text/css" rel="stylesheet" href="resources/api/bootstrap/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="resources/api/bootstrap/plugins/datetimepicker/bootstrap-datetimepicker.min.css">
     <script type="text/javascript" src="resources/api/bootstrap/jquery.min.js"></script>
@@ -102,6 +102,7 @@
             success:function (data) {
                 if(data){
                     alert("自动切换日期：切换成功");
+                    $("#type").val("自动切换");
                 }else{
                     alert("自动切换日期：切换失败");
                 }
