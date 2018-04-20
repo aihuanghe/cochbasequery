@@ -142,13 +142,9 @@
     <orderEntry type="library" name="Maven: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-math:2.2" level="project" />
     <orderEntry type="library" name="Maven: org.mortbay.jetty:jetty-sslengine:6.1.26" level="project" />
-    <orderEntry type="library" name="Maven: org.mortbay.jetty:jsp-2.1:6.1.14" level="project" />
     <orderEntry type="library" name="Maven: org.mortbay.jetty:jsp-api-2.1:6.1.14" level="project" />
     <orderEntry type="library" name="Maven: org.mortbay.jetty:servlet-api-2.5:6.1.14" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-jaxrs:1.9.13" level="project" />
-    <orderEntry type="library" name="Maven: tomcat:jasper-compiler:5.5.23" level="project" />
-    <orderEntry type="library" name="Maven: tomcat:jasper-runtime:5.5.23" level="project" />
-    <orderEntry type="library" name="Maven: commons-el:commons-el:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.jamon:jamon-runtime:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.lmax:disruptor:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-client:2.5.1" level="project" />
@@ -167,8 +163,6 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-math3:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: xmlenc:xmlenc:0.52" level="project" />
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.1" level="project" />
-    <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: javax.servlet.jsp:jsp-api:2.1" level="project" />
     <orderEntry type="library" name="Maven: com.sun.jersey:jersey-json:1.9" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jettison:jettison:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-xc:1.8.3" level="project" />
