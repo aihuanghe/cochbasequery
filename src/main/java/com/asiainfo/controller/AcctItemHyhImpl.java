@@ -1,4 +1,4 @@
-package com.asiainfo.service;
+package com.asiainfo.controller;
 
 import com.asiainfo.busi.AcctItemHyhBusi;
 import net.sf.json.JSONException;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-@WebServlet("/queryAcctItemHyh")
 public class AcctItemHyhImpl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final static Log log = LogFactory.getLog(AcctItemHyhImpl.class.getSimpleName());

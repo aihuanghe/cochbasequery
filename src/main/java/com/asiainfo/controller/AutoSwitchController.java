@@ -22,4 +22,9 @@ public class AutoSwitchController extends HttpServlet {
         logger.info("自动切换设置成功");
         writer.append("true");
     }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doGet(request,response);
+    }
 }

@@ -17,143 +17,118 @@ import java.util.*;
 public class CustGroupCheckBusi {
     private final static Log log = LogFactory.getLog(CustGroupCheckBusi.class.getSimpleName());
 
-    private List<String> scanQuery(String StratRowkey, String EndRowKey, String tablename ,org.apache.hadoop.hbase.client.Connection conn) throws Exception {
-        log.debug("================scan query=================");
-        log.debug("StratRowkey=["+StratRowkey+"]");
-        log.debug("EndRowKey=["+EndRowKey+"]");
-        // org.apache.hadoop.hbase.client.Connection conn = Connection.getInstance().getHBaseConnection();
-//        Table query = conn.getTable(TableName.valueOf(tablename));
-//        Scan scan = new Scan();
-//        scan.setStartRow(Bytes.toBytes(StratRowkey));
-//        scan.setStopRow(Bytes.toBytes(EndRowKey));
-//        ResultScanner rs = query.getScanner(scan);
-        ResultScanner rs =Connmanage.scanQuery(StratRowkey,EndRowKey,tablename);
-        List<String> re=new ArrayList<String>();
+    private List<String> scanQuery(String startRowKey, String endRowKey, String tableName, org.apache.hadoop.hbase.client.Connection conn) throws Exception {
+        log.debug("================scan query begin=================");
+        log.debug("tableName=[" + tableName + "]");
+        log.debug("startRowKey=[" + startRowKey + "]");
+        log.debug("endRowKey=[" + endRowKey + "]");
+        ResultScanner rs = Connmanage.scanQuery(startRowKey, endRowKey, tableName);
+        List<String> re = new ArrayList<String>();
 
-
-        Integer i=0;
         for (Result res : rs) {
-            log.debug("res=["+Bytes.toString(res.getRow())+"]");
+            log.debug("res=[" + Bytes.toString(res.getRow()) + "]");
             re.add(Bytes.toString(res.getRow()));
         }
-        //query.close();
-        log.debug("=================================");
-        return  re;
+        log.debug("================scan query end=================");
+        return re;
     }
 
     public String queryExist(String val) throws Exception {
-        JSONObject js=JSONObject.fromObject(val);
-        String telno=js.getString("telnum");
-        String groupid=js.getString("custgroupid");
-        String tableName="COC_CUSTOMER_GROUP_";
-        if (SwitchDateUtils.IS_AUTOSWITCH){
+        log.info("--------------查询号码是否在某个客户群组中 queryExist begin--------------");
+        log.info("queryExist params:" + val);
+        JSONObject js = JSONObject.fromObject(val);
+        String telno = js.getString("telnum");
+        String groupid = js.getString("custgroupid");
+        String tableName = "COC_CUSTOMER_GROUP_";
+        if (SwitchDateUtils.IS_AUTOSWITCH) {
             Calendar c = Calendar.getInstance();
             c.setTime(new Date());
+            //昨天的日期
             c.add(Calendar.DAY_OF_MONTH, -1);
-            Date yestoday = c.getTime();
-            tableName+= Tools.date2Str(yestoday,"yyyyMMdd");
+            tableName += Tools.date2Str(c.getTime(), "yyyyMMdd");
             log.info("自动切换表名：" + tableName);
-        }else{
-            if(StringUtils.isNotBlank(SwitchDateUtils.SWITCH_DATE)){
-                tableName+=Tools.convertDate(SwitchDateUtils.SWITCH_DATE);
+        } else {
+            if (StringUtils.isNotBlank(SwitchDateUtils.SWITCH_DATE)) {
+                tableName += Tools.convertDate(SwitchDateUtils.SWITCH_DATE);
                 log.info("手动切换日期：" + SwitchDateUtils.SWITCH_DATE);
                 log.info("手动切换表名：" + tableName);
-            }else{
+            } else {
                 throw new RuntimeException("设置的手动切换日期为null");
             }
         }
-//        HTableDescriptor[] allTable =Connmanage.getTableList();
-//        List<String> tables = new ArrayList<String>();
-//        for (HTableDescriptor hTableDescriptor : allTable) {
-//            tables.add(hTableDescriptor.getNameAsString());
-//            //System.out.println(hTableDescriptor.getNameAsString());
-//        }
-//        //admin.close();
+
         log.info("-------------------");
-        log.info("tableName="+tableName);
-        Map<String,String> rt=new HashMap<String, String>();
-        if(Connmanage.tableExists(tableName))
-        {
-            String rowkey=new MD5RowKeyGenerator().generatePrefix(telno)+telno+"|"+groupid;
-            String tmp1=groupid.substring(6, groupid.length());
-            Long val1=Long.valueOf(tmp1);
-            val1=val1+1l;
-            String tmpgrop = String.format("%08d",val1);
-            String enrow=new MD5RowKeyGenerator().generatePrefix(telno)+telno+"|"+groupid.substring(0,6)+tmpgrop;
-            if(scanQuery(rowkey,enrow,tableName,null).size()>0)
-            {
-                rt.put("retcode","0");
-                rt.put("errmsg","数据存在");
-                rt.put("telstatus","0");
+        log.info("tableName=" + tableName);
+        Map<String, String> rt = new HashMap<String, String>();
+        if (Connmanage.tableExists(tableName)) {
+            String rowKey = new MD5RowKeyGenerator().generatePrefix(telno) + telno + "|" + groupid;
+            log.info("查询客户群startRow:" + rowKey);
+//            //<jsonParam>{"telnum":"18802789452","custgroupid":"KHQ27000010649"}</jsonParam>
+//            //oc513477343118|KHQ27000010649
+            if (scanQuery(rowKey, rowKey, tableName, null).size() > 0) {
+                rt.put("retcode", "0");
+                rt.put("errmsg", "数据存在");
+                rt.put("telstatus", "0");
+            } else {
+                rt.put("retcode", "0");
+                rt.put("errmsg", "数据不存在");
+                rt.put("telstatus", "-1");
             }
-            else
-            {
-                rt.put("retcode","0");
-                rt.put("errmsg","数据不存在");
-                rt.put("telstatus","-1");
-            }
-        }
-        else
-        {
-            rt.put("retcode","-2");
-            rt.put("errmsg","表"+tableName+"未生成");
+        } else {
+            rt.put("retcode", "-2");
+            rt.put("errmsg", "表" + tableName + "未生成");
         }
 
-        return JSONObject.fromObject(rt).toString();
+        String  resultInfo= JSONObject.fromObject(rt).toString();
+        log.info("queryExist result:"+ resultInfo);
+        log.info("--------------查询号码是否在某个客户群组中 queryExist begin--------------");
+        return resultInfo;
     }
 
     public String queryInfo(String val) throws Exception {
-        JSONObject js=JSONObject.fromObject(val);
-        String telno=js.getString("telnum");
+        log.info("---------查询客户群组信息 queryInfo begin----------");
+        log.info("queryInfo params:" + val);
+        String resultInfo;
+        JSONObject js = JSONObject.fromObject(val);
+        String telno = js.getString("telnum");
         //String groupid=js.getString("custgroupid");
-        String tableName="COC_CUSTOMER_GROUP_";
+        String tableName = "COC_CUSTOMER_GROUP_";
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
+        //昨天日期
         c.add(Calendar.DAY_OF_MONTH, -1);
-        Date yestoday = c.getTime();
-        tableName+= Tools.date2Str(yestoday,"yyyyMMdd");
-//        org.apache.hadoop.hbase.client.Connection conn = Connection.getInstance().getHBaseConnection();
-//        Admin admin =conn.getAdmin();
-//        HTableDescriptor[] allTable = admin.listTables();
-//        HTableDescriptor[] allTable =Connmanage.getTableList();
-//        List<String> tables = new ArrayList<String>();
-//        for (HTableDescriptor hTableDescriptor : allTable) {
-//            tables.add(hTableDescriptor.getNameAsString());
-//            //System.out.println(hTableDescriptor.getNameAsString());
-//        }
-//        //admin.close();
-        log.info("-------------------");
-        log.info("tableName="+tableName);
+        tableName += Tools.date2Str(c.getTime(), "yyyyMMdd");
+        log.info("tableName=" + tableName);
 
 
-        Map<String,String> rt=new HashMap<String, String>();
-        if(Connmanage.tableExists(tableName))
-        {
-            String rowkey=new MD5RowKeyGenerator().generatePrefix(telno)+telno;
-            String endrwo=new MD5RowKeyGenerator().generatePrefix(telno)+String.valueOf(Long.valueOf(telno)+1);
-            log.info("rowkey="+rowkey+" endrwo="+endrwo);
-            List<String> strlist= scanQuery(rowkey,endrwo,tableName,null);
-            List<Map<String,String>> tmp=new ArrayList<Map<String, String>>();
-            for(String str:strlist)
-            {
-                Map<String,String> tmpmap=new HashMap<String, String>();
-                String groupid=str.replaceAll(rowkey+"\\|","");
-                groupid=groupid.substring(0,groupid.length()-16);
-                tmpmap.put("id",groupid);
+        Map<String, String> rt = new HashMap<String, String>();
+        if (Connmanage.tableExists(tableName)) {
+            //13477343118 - 开始行： oc513477343118
+            String rowKey = new MD5RowKeyGenerator().generatePrefix(telno) + telno;
+            log.info("rowKey=" + rowKey + ",endKey=" + rowKey);
+            List<String> strlist = scanQuery(rowKey, rowKey, tableName, null);
+            List<Map<String, String>> tmp = new ArrayList<Map<String, String>>();
+            for (String str : strlist) {
+                Map<String, String> tmpmap = new HashMap<String, String>();
+                String groupid = str.replaceAll(rowKey + "\\|", "");
+                groupid = groupid.substring(0, groupid.length() - 16);
+                tmpmap.put("id", groupid);
                 tmp.add(tmpmap);
             }
-            rt.put("retcode","0");
-            rt.put("errmsg","");
-            JSONObject jrt= JSONObject.fromObject(rt);
-            jrt.put("custgrouplist",JSONArray.fromObject(tmp));
-            return jrt.toString();
+            rt.put("retcode", "0");
+            rt.put("errmsg", "");
+            JSONObject jrt = JSONObject.fromObject(rt);
+            jrt.put("custgrouplist", JSONArray.fromObject(tmp));
+            resultInfo = jrt.toString();
+        } else {
+            rt.put("retcode", "-2");
+            rt.put("errmsg", "表" + tableName + "未生成");
+            resultInfo = JSONObject.fromObject(rt).toString();
         }
-        else
-        {
-            rt.put("retcode","-2");
-            rt.put("errmsg","表"+tableName+"未生成");
-            return JSONObject.fromObject(rt).toString();
-        }
+
+        log.info("queryInfo result:"+ resultInfo);
+        log.info("---------查询客户群组信息 queryInfo end----------");
+        return resultInfo;
 
 
     }

@@ -22,4 +22,10 @@ public class GetDateController extends HttpServlet{
         logger.info("{\"autoSwitch\":\""+SwitchDateUtils.IS_AUTOSWITCH + "\",\"date\":\"" + SwitchDateUtils.SWITCH_DATE + "\"}");
         writer.append("{\"autoSwitch\":\""+SwitchDateUtils.IS_AUTOSWITCH + "\",\"date\":\"" + SwitchDateUtils.SWITCH_DATE + "\"}");
     }
+
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
 }

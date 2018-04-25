@@ -24,4 +24,10 @@ public class SetDateController  extends HttpServlet{
         PrintWriter writer=response.getWriter();
         writer.append(SwitchDateUtils.SWITCH_DATE);
     }
+
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        this.doGet(req, resp);
+    }
 }

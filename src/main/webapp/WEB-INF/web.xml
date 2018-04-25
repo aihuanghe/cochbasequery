@@ -59,6 +59,14 @@
     <servlet-name>autoSwitch</servlet-name>
     <url-pattern>/autoSwitch</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>queryAcctItemHyh</servlet-name>
+    <servlet-class>com.asiainfo.controller.AcctItemHyhImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>queryAcctItemHyh</servlet-name>
+    <url-pattern>/queryAcctItemHyh</url-pattern>
+  </servlet-mapping>
 
 
 </web-app>

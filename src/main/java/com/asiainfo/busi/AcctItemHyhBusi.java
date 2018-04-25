@@ -24,16 +24,8 @@ import java.util.Map;
 public class AcctItemHyhBusi {
     private final static Log log = LogFactory.getLog(AcctItemHyhBusi.class.getSimpleName());
 
-
     private List<String> listcol = new ArrayList<String>();
-    //
-//    private Map<String,String> m_mapColParamIn=new HashMap<String, String>();
-//    private Map<String,List<String>> m_rowkeyRule=new HashMap<String, List<String>>();
-//    private void parasColMap(String var)
-//    {
-//
-//    }
-    private Integer count=0;
+
     public AcctItemHyhBusi() {
         listcol.add(new String("phoneNo"));
         listcol.add(new String("star"));
@@ -80,20 +72,17 @@ public class AcctItemHyhBusi {
 
 
     }
+
     public JSONObject getQueryRes(JSONObject jsparam) {
         try {
+            log.info("===============请求数据:" + jsparam + "");
+            String startKey = new MD5RowKeyGenerator().generatePrefix(jsparam.getString("phoneNo")) + jsparam.getString("phoneNo");
+            String endKey = new MD5RowKeyGenerator().generatePrefix(jsparam.getString("phoneNo")) + String.valueOf(Long.valueOf(jsparam.getString("phoneNo")) + 1);
+            String tablename = "DM_FUN_ACCTITEM_HYH_HBASE_YM";
 
-            log.info("===============请求数据:"+jsparam+"");
-            String startkey=new MD5RowKeyGenerator().generatePrefix(jsparam.getString("phoneNo"))+jsparam.getString("phoneNo");
-            String endkey=new MD5RowKeyGenerator().generatePrefix(jsparam.getString("phoneNo"))+String.valueOf(Long.valueOf(jsparam.getString("phoneNo"))+1);
-            String tablename="DM_FUN_ACCTITEM_HYH_HBASE_YM";
-
-
-
-            List<String> res=this.scanQuery(startkey,endkey,tablename) ;
+            List<String> res = this.scanQuery(startKey, endKey, tablename);
 
             JSONObject js = transOut(res);
-           // js.put("total", this.count);
             js.put("rtcode", 0);
             js.put("rtmsg", "查询正常");
             return JSONObject.fromObject(js);
@@ -101,28 +90,25 @@ public class AcctItemHyhBusi {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         JSONObject js = new JSONObject();
-       // js.put("total", 0);
         js.put("rtcode", -1);
         js.put("rtmsg", "查询错误");
         return js;
     }
 
 
-    private List<String> scanQuery(String StratRowkey, String EndRowKey, String tablename) throws Exception {
-        ResultScanner rs = Connmanage.scanQuery(StratRowkey,EndRowKey,tablename);
-        List<String> re=new ArrayList<String>();
+    private List<String> scanQuery(String startRowKey, String endRowKey, String tablename) throws Exception {
+        ResultScanner rs = Connmanage.scanQuery(startRowKey, endRowKey, tablename);
+        List<String> re = new ArrayList<String>();
 
-        Integer i=0;
+        Integer i = 0;
         for (Result res : rs) {
             re.add(Bytes.toString(res.getValue(Bytes.toBytes(new String("F")), Bytes.toBytes(new String("COL")))));
         }
-        return  re;
+        return re;
     }
 
     public JSONObject transOut(List<String> data) throws Exception {
@@ -132,15 +118,15 @@ public class AcctItemHyhBusi {
             for (String tmp : data) {
                 log.debug("==============data================");
                 log.debug(tmp);
-                if(tmp.length()<=0)
+                if (tmp.length() <= 0)
                     continue;
-                log.debug("idx="+tmp.indexOf("|"));
+                log.debug("idx=" + tmp.indexOf("|"));
                 log.debug("==================================");
-                if(tmp.indexOf("|")<0)
+                if (tmp.indexOf("|") < 0)
                     continue;
                 Map<String, String> mapr = new HashMap<String, String>();
                 String[] strlist = tmp.split(new String("\\|"));
-                log.debug("=======strlist=["+strlist.length+"]   col size=["+listcol.size()+"]================");
+                log.debug("=======strlist=[" + strlist.length + "]   col size=[" + listcol.size() + "]================");
                 for (int i = 0; i < listcol.size(); i++) {
                     mapr.put(listcol.get(i), strlist[i]);
                 }
@@ -151,8 +137,7 @@ public class AcctItemHyhBusi {
 
             js.put("datas", arr);
             return js;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             throw e;
         }
 
