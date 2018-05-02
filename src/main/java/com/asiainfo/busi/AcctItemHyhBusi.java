@@ -1,6 +1,5 @@
 package com.asiainfo.busi;
 
-import com.asiainfo.db.Connection;
 import com.asiainfo.db.Connmanage;
 import com.asiainfo.until.MD5RowKeyGenerator;
 import net.sf.json.JSONArray;
@@ -8,11 +7,8 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;

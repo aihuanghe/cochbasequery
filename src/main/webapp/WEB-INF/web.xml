@@ -2,71 +2,90 @@
         "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 <web-app>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 
 
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:applicationContext.xml</param-value>
-  </context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
 
-  <listener>
-    <listener-class>
-      org.springframework.web.context.ContextLoaderListener
-    </listener-class>
-  </listener>
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
 
 
+    <servlet>
+        <servlet-name>CXFServlet</servlet-name>
+        <display-name>CXFServlet</display-name>
+        <servlet-class>
+            org.apache.cxf.transport.servlet.CXFServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-  <servlet>
-    <servlet-name>CXFServlet</servlet-name>
-    <display-name>CXFServlet</display-name>
-    <servlet-class>
-      org.apache.cxf.transport.servlet.CXFServlet
-    </servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
+    <servlet-mapping>
+        <servlet-name>CXFServlet</servlet-name>
+        <url-pattern>/ws/*</url-pattern>
+    </servlet-mapping>
 
-  <servlet-mapping>
-    <servlet-name>CXFServlet</servlet-name>
-    <url-pattern>/ws/*</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <servlet-name>getDate</servlet-name>
+        <servlet-class>com.asiainfo.controller.GetDateController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>getDate</servlet-name>
+        <url-pattern>/getDate</url-pattern>
+    </servlet-mapping>
 
-  <servlet>
-    <servlet-name>getDate</servlet-name>
-    <servlet-class>com.asiainfo.controller.GetDateController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>getDate</servlet-name>
-    <url-pattern>/getDate</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <servlet-name>setDate</servlet-name>
+        <servlet-class>com.asiainfo.controller.SetDateController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>setDate</servlet-name>
+        <url-pattern>/setDate</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>autoSwitch</servlet-name>
+        <servlet-class>com.asiainfo.controller.AutoSwitchController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>autoSwitch</servlet-name>
+        <url-pattern>/autoSwitch</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>queryAcctItemHyh</servlet-name>
+        <servlet-class>com.asiainfo.controller.AcctItemHyhImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>queryAcctItemHyh</servlet-name>
+        <url-pattern>/queryAcctItemHyh</url-pattern>
+    </servlet-mapping>
 
-  <servlet>
-  <servlet-name>setDate</servlet-name>
-  <servlet-class>com.asiainfo.controller.SetDateController</servlet-class>
-</servlet>
-  <servlet-mapping>
-    <servlet-name>setDate</servlet-name>
-    <url-pattern>/setDate</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>autoSwitch</servlet-name>
-    <servlet-class>com.asiainfo.controller.AutoSwitchController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>autoSwitch</servlet-name>
-    <url-pattern>/autoSwitch</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>queryAcctItemHyh</servlet-name>
-    <servlet-class>com.asiainfo.controller.AcctItemHyhImpl</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>queryAcctItemHyh</servlet-name>
-    <url-pattern>/queryAcctItemHyh</url-pattern>
-  </servlet-mapping>
+    <!--同步手动设置日期-->
+    <servlet>
+        <servlet-name>asyncSetDate</servlet-name>
+        <servlet-class>com.asiainfo.controller.AsyncSetDateController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>asyncSetDate</servlet-name>
+        <url-pattern>/asyncSetDate</url-pattern>
+    </servlet-mapping>
+
+    <!--同步切换自动设置日期-->
+    <servlet>
+        <servlet-name>asyncAutoSwitch</servlet-name>
+        <servlet-class>com.asiainfo.controller.AsyncAutoSwitchController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>asyncAutoSwitch</servlet-name>
+        <url-pattern>/asyncAutoSwitch</url-pattern>
+    </servlet-mapping>
 
 
 </web-app>

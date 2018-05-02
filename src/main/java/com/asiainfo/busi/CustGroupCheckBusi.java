@@ -62,10 +62,13 @@ public class CustGroupCheckBusi {
         Map<String, String> rt = new HashMap<String, String>();
         if (Connmanage.tableExists(tableName)) {
             String rowKey = new MD5RowKeyGenerator().generatePrefix(telno) + telno + "|" + groupid;
-            log.info("查询客户群startRow:" + rowKey);
-//            //<jsonParam>{"telnum":"18802789452","custgroupid":"KHQ27000010649"}</jsonParam>
-//            //oc513477343118|KHQ27000010649
-            if (scanQuery(rowKey, rowKey, tableName, null).size() > 0) {
+            String groupId = String.format("%08d", Long.valueOf(groupid.substring(6, groupid.length())) + 1);
+            String enKey = new MD5RowKeyGenerator().generatePrefix(telno) + telno + "|" + groupid.substring(0, 6) + groupId;
+            log.info("查询客户群是否存在startRow:" + rowKey);
+            log.info("查询客户群是否存在endRow:" + enKey);
+            //<jsonParam>{"telnum":"18802789452","custgroupid":"KHQ27000010649"}</jsonParam>
+            //oc513477343118|KHQ27000010649
+            if (scanQuery(rowKey, enKey, tableName, null).size() > 0) {
                 rt.put("retcode", "0");
                 rt.put("errmsg", "数据存在");
                 rt.put("telstatus", "0");
@@ -79,8 +82,8 @@ public class CustGroupCheckBusi {
             rt.put("errmsg", "表" + tableName + "未生成");
         }
 
-        String  resultInfo= JSONObject.fromObject(rt).toString();
-        log.info("queryExist result:"+ resultInfo);
+        String resultInfo = JSONObject.fromObject(rt).toString();
+        log.info("queryExist result:" + resultInfo);
         log.info("--------------查询号码是否在某个客户群组中 queryExist begin--------------");
         return resultInfo;
     }
@@ -93,20 +96,30 @@ public class CustGroupCheckBusi {
         String telno = js.getString("telnum");
         //String groupid=js.getString("custgroupid");
         String tableName = "COC_CUSTOMER_GROUP_";
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        //昨天日期
-        c.add(Calendar.DAY_OF_MONTH, -1);
-        tableName += Tools.date2Str(c.getTime(), "yyyyMMdd");
-        log.info("tableName=" + tableName);
+        if (SwitchDateUtils.IS_AUTOSWITCH) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(new Date());
+            c.add(Calendar.DAY_OF_MONTH, -1);
+            tableName += Tools.date2Str(c.getTime(), "yyyyMMdd");
+            log.info("queryInfo:自动切换表名：" + tableName);
+        } else {
+            if (StringUtils.isNotBlank(SwitchDateUtils.SWITCH_DATE)) {
+                tableName += Tools.convertDate(SwitchDateUtils.SWITCH_DATE);
+                log.info("queryInfo:手动切换日期：" + SwitchDateUtils.SWITCH_DATE);
+                log.info("queryInfo:手动切换表名：" + tableName);
+            } else {
+                throw new RuntimeException("设置的手动切换日期为null");
+            }
+        }
 
 
         Map<String, String> rt = new HashMap<String, String>();
         if (Connmanage.tableExists(tableName)) {
             //13477343118 - 开始行： oc513477343118
             String rowKey = new MD5RowKeyGenerator().generatePrefix(telno) + telno;
-            log.info("rowKey=" + rowKey + ",endKey=" + rowKey);
-            List<String> strlist = scanQuery(rowKey, rowKey, tableName, null);
+            String endKey = new MD5RowKeyGenerator().generatePrefix(telno) + String.valueOf(Long.valueOf(telno) + 1);
+            log.info("查询客户信息: rowKey=" + rowKey + ",endKey=" + rowKey);
+            List<String> strlist = scanQuery(rowKey, endKey, tableName, null);
             List<Map<String, String>> tmp = new ArrayList<Map<String, String>>();
             for (String str : strlist) {
                 Map<String, String> tmpmap = new HashMap<String, String>();
@@ -126,7 +139,7 @@ public class CustGroupCheckBusi {
             resultInfo = JSONObject.fromObject(rt).toString();
         }
 
-        log.info("queryInfo result:"+ resultInfo);
+        log.info("queryInfo result:" + resultInfo);
         log.info("---------查询客户群组信息 queryInfo end----------");
         return resultInfo;
 

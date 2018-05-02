@@ -1,5 +1,6 @@
 package com.asiainfo.controller;
 
+import com.asiainfo.until.HbaseUtils;
 import com.asiainfo.until.SwitchDateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ public class SetDateController  extends HttpServlet{
         String date = request.getParameter("date");
         SwitchDateUtils.SWITCH_DATE = date;
         SwitchDateUtils.IS_AUTOSWITCH = false;
+        //同步设置其它服务器
+        HbaseUtils.asyncSetDate(date);
         logger.info("手动切换日期为："+date);
         PrintWriter writer=response.getWriter();
         writer.append(SwitchDateUtils.SWITCH_DATE);
